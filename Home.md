@@ -1,4 +1,5 @@
-[Link to this page](https://github.com/Un1Gfn/lineage)
+[Link to repo](https://github.com/Un1Gfn/lineage)
+
 [Link to CircleCI pipelines](https://app.circleci.com/pipelines/github/Un1Gfn/lineage)
 
 CircleCI
@@ -38,6 +39,41 @@ Nexus 6P
   * [lineage wiki](https://wiki.lineageos.org/extracting_blobs_from_zips.html)
   * [aosp guide](https://source.android.com/devices/bootloader/partitions-images)
 
+[zstd](https://facebook.github.io/zstd/)
+* [comparison](https://engineering.fb.com/core-data/smaller-and-faster-data-compression-with-zstandard/)
+* [benchmark](https://quixdb.github.io/squash-benchmark/)
+* xz(1): 
+>Threaded  decompression  hasn't  been implemented yet
+```
+$ su -c "
+  sync
+  sleep 1
+  fstrim -av
+  sleep 1
+  echo 3 >/proc/sys/vm/drop_caches
+  sleep 1
+" - root
+
+$ ls -lh linux-5.6.4.tar.xz
+107M
+
+$ /usr/bin/time -f "%E" tar xf linux-5.6.4.tar.xz
+0:16.67
+0:16.49
+
+$ /usr/bin/time -f "%E" tar -c --zstd -f linux-linux-5.6.4.tar.zstd linux-5.6.4/
+0:21.88
+
+$ ls -lh linux-linux-5.6.4.tar.zstd
+163M
+
+$ /usr/bin/time -f "%E" tar xf linux-linux-5.6.4.tar.zstd
+0:10.21
+
+$ ls -l linux-5.6.4/
+Apr 13
+```
+
 tmux
 * Detach: <kbd>Ctrl</kbd>+<kbd>b</kbd> <kbd>d</kbd>
 * Scroll: <kbd>Ctrl</kbd>+<kbd>b</kbd> <kbd>[</kbd>
@@ -70,7 +106,7 @@ Save disk space
   * [AUR](https://aur.archlinux.org/packages/duc/)
   * [xenial](https://packages.ubuntu.com/xenial/duc)
 
-file *img
+file \*img
 ```bash
 boot.img:                           Android bootimg, kernel (0x8000), ramdisk (0x2000000), page size: 4096, cmdline (androidboot.hardware=angler androidboot.console=ttyHSL0 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm)
 recovery.img:                       Android bootimg, kernel (0x8000), ramdisk (0x2000000), page size: 4096, cmdline (androidboot.hardware=angler androidboot.console=ttyHSL0 msm_rtb.filter=0x37 ehci-hcd.park=3 lpm)
@@ -156,10 +192,6 @@ m droid
 ```
 
 <details><summary> h </summary>
-
-[zstd](https://facebook.github.io/zstd/)
-* [comparison](https://engineering.fb.com/core-data/smaller-and-faster-data-compression-with-zstandard/)
-* [benchmark](https://quixdb.github.io/squash-benchmark/)
 
 LineageOS
 * [the updater app stores zips in /data/lineageos_updates/](https://wiki.lineageos.org/faq.html#where-does-the-updater-app-store-the-downloaded-zip)

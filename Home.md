@@ -11,6 +11,7 @@ Debian/Ubuntu
 * [J\*](https://askubuntu.com/questions/150057/how-can-i-tell-what-version-of-java-i-have-installed)
 * [alternatives system](https://wiki.debian.org/DebianAlternatives)
 * tell which package provide FILE `dpkg -S FILE`
+* tell which files are provided by PACKAGE `dpkg -L PACKAGE`
 
 [Repo](https://gerrit.googlesource.com/git-repo/)
 * [Repo Command Reference](https://source.android.com/setup/develop/repo)
@@ -42,7 +43,7 @@ Nexus 6P
 [zstd](https://facebook.github.io/zstd/)
 * [comparison](https://engineering.fb.com/core-data/smaller-and-faster-data-compression-with-zstandard/)
 * [benchmark](https://quixdb.github.io/squash-benchmark/)
->xz(1): Threaded  decompression  hasn't  been implemented yet
+>xz(1): Threaded decompression hasn't been implemented yet
 ```bash
 su -c "
   sync

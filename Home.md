@@ -42,10 +42,9 @@ Nexus 6P
 [zstd](https://facebook.github.io/zstd/)
 * [comparison](https://engineering.fb.com/core-data/smaller-and-faster-data-compression-with-zstandard/)
 * [benchmark](https://quixdb.github.io/squash-benchmark/)
-* xz(1): 
->Threaded  decompression  hasn't  been implemented yet
-```
-$ su -c "
+>xz(1): Threaded  decompression  hasn't  been implemented yet
+```bash
+su -c "
   sync
   sleep 1
   fstrim -av
@@ -54,24 +53,27 @@ $ su -c "
   sleep 1
 " - root
 
-$ ls -lh linux-5.6.4.tar.xz
-107M
+ls -lh linux-5.6.4.tar.xz
+# 107M
 
-$ /usr/bin/time -f "%E" tar xf linux-5.6.4.tar.xz
-0:16.67
-0:16.49
+/usr/bin/time -f "%E" tar xf linux-5.6.4.tar.xz
+# 0:16.67
+# 0:16.49
 
-$ /usr/bin/time -f "%E" tar -c --zstd -f linux-linux-5.6.4.tar.zstd linux-5.6.4/
-0:21.88
+/usr/bin/time -f "%E" tar -c --zstd -f linux-linux-5.6.4.tar.zst linux-5.6.4/
+# 0:19.43 0:21.88
 
-$ ls -lh linux-linux-5.6.4.tar.zstd
-163M
+tar -cf - linux-5.6.4/ | /usr/bin/time -f "%E" zstd -T2 >linux-linux-5.6.4.tar.zst
+# 0:19.27
 
-$ /usr/bin/time -f "%E" tar xf linux-linux-5.6.4.tar.zstd
-0:10.21
+ls -lh linux-linux-5.6.4.tar.zst
+# 163M
 
-$ ls -l linux-5.6.4/
-Apr 13
+/usr/bin/time -f "%E" tar xf linux-linux-5.6.4.tar.zst
+# 0:10.21
+
+ls -l linux-5.6.4/
+# Apr 13
 ```
 
 tmux

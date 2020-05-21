@@ -1,0 +1,20 @@
+
+sudo -i docker exec -w / -i arch /bin/ls -Al /
+sudo -i docker exec -w / -i arch /bin/ls -Al
+sudo -i docker exec -w / -it arch /bin/bash
+sudo -i docker kill arch
+sudo -i docker rm arch
+
+
+      - run:
+          name: "[D] rc"
+            $docker_exec rm -fv "BASH_ENV_DOCKER"
+            echo "export RAM=$RAM" | $docker_exec tee "$BASH_ENV_DOCKER"
+            cat <<"EOF" | $docker_exec tee "$BASH_ENV_DOCKER"
+            export _JAVA_OPTIONS="-Xmx$RAM"
+            export  update="pacman -Syy --noprogressbar"
+            export   unreg="pacman -D --asdeps"
+            export partial="pacman -S --needed --nodeps --noprogressbar --noconfirm" # one --nodeps skip ver chk only
+            export      gc="pacman -Rssc --noprogressbar --noconfirm $(pacman -Qdttq)"
+            export upgrade="pacman -Suu --noprogressbar --noconfirm"
+            EOF

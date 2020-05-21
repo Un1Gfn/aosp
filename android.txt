@@ -1,0 +1,190 @@
+#!/dev/null
+# https://gist.github.com/Un1Gfn/ab83b0a4f77eacbb109b98efe18672c8/edit
+
+find /sdcard/n2 -exec am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d file://{} \;
+find /sdcard/n2 | while read f; do
+  am broadcast -a android.intent.action.MEDIA_SCANNER_SCAN_FILE -d "file://${f}" 
+done
+
+# Oneshot full
+# 144M      $(du . -hd 0)
+# 139349444 $(du . -bd 0)
+git clone --recurse-submodules https://github.com/CGDF-Github/SSD-Android.git
+
+# Steps full
+git clone https://github.com/CGDF-Github/SSD-Android.git
+cd SSD-Android
+git submodule update --init --progress --recursive
+
+# Oneshot shallow
+# Cloning into '/home/darren/SSD-Android.shallow/core/src/main/jni/shadowsocks-libev'...
+# error: Server does not allow request for unadvertised object ba4c45d6b4d30fd6b2557e92a770ccae12ec9257
+# Fetched in submodule path 'core/src/main/jni/badvpn', but it did not contain ba4c45d6b4d30fd6b2557e92a770ccae12ec9257. Direct fetching of that commit failed.
+# git clone \
+#   --depth 1 \
+#   --recurse-submodules \
+#   --shallow-submodules \
+#   https://github.com/CGDF-Github/SSD-Android.git \
+#   SSD-Android.shallow
+
+# git submodule update --progress --depth 1
+
+git submodule status --recursive
+git checkout
+git clean -dfx
+
+# https://wiki.archlinux.org/index.php/Java#Launching_an_application_with_the_non-default_java_version
+# https://source.android.com/setup/build/older-versions#jdk
+# https://wiki.archlinux.org/index.php/Android#Java_Development_Kit
+
+# export ANDROID_HOME=/opt/android-sdk/
+
+
+export PATH=/usr/lib/jvm/java-11-openjdk/jre/bin/:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk/
+
+export PATH=/usr/lib/jvm/java-10-openjdk/jre/bin/:$PATH
+export JAVA_HOME=/usr/lib/jvm/java-10-openjdk/
+
+
+JAVA_HOME=/usr/lib/jvm/java-8-openjdk/ sdkmanager --licenses
+
+./gradlew --stop
+
+time ./gradlew -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=1080 assembleRelease
+
+git status --ignored
+
+find . -type f -name '*.apk' -exec ls -lh {} \;
+
+# https://developer.android.com/studio/command-line/apksigner
+# https://stackoverflow.com/a/14273074/8243991
+
+# /opt/android-sdk/build-tools/28.0.3/zipalign
+# keytool -genkey --help
+# -validity 1235555453 \
+
+# https://developer.android.com/studio/build/building-cmdline#sign_cmdline
+export PATH=$PATH:/opt/android-sdk/build-tools/28.0.3
+yes | keytool -genkeypair -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias my-alias \
+  -storepass 000000
+zipalign -v -p 4 *.apk my-app-unsigned-aligned.apk
+# echo 000000 | apksigner sign --ks my-release-key.jks --out my-app-release.apk my-app-unsigned-aligned.apk
+apksigner sign --ks my-release-key.jks --ks-pass pass:000000 --out my-app-release.apk my-app-unsigned-aligned.apk
+
+
+# CircleCi
+export PATH=$PATH:/opt/android/sdk/build-tools/28.0.3/
+
+yes \
+  | keytool \
+  -genkeypair \
+  -alias my-alias \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000 \
+  -keypass 000000 \
+  -keystore my-release-key.jks \
+  -storepass 000000 \
+  -v
+
+for i in {mobile,tv}/build/outputs/apk/release/*.apk; do
+  ORIG="$i"
+  ALIGNED="${i%-unsigned.apk}-unsigned-aligned.apk"
+  SIGNED="${i%-unsigned.apk}-signed-aligned.apk"
+  # echo $ORIG
+  # echo $ALIGNED
+  # echo $SIGNED
+  zipalign -v -p 4 $ORIG $ALIGNED
+  apksigner sign --ks my-release-key.jks --ks-pass pass:000000 --out $SIGNED $ALIGNED
+  # read -r
+done
+
+cp -v my-release-key.jks mobile/build/outputs/apk/release/
+cp -v my-release-key.jks tv/build/outputs/apk/release/
+rm -fv my-release-key.jks
+
+WIFI
+BOOKBAR1
+02031056754
+
+# Unlock
+fastboot flashing get_unlock_ability
+fastboot flashing unlock
+fastboot flashing unlock_critical
+
+# Clear angular
+# DO NOT ERASE BOOTLOADER
+fastboot erase boot
+fastboot erase cache
+fastboot erase data
+fastboot erase dtbo
+fastboot erase radio
+fastboot erase recovery
+fastboot erase system
+fastboot erase vbmeta
+fastboot erase vendor
+
+# Flash base angular
+# boot.img
+# recovery.img
+# system.img
+pad () {
+  # https://bugs.archlinux.org/task/63370
+  block_size=4096
+  filename=bootloader-angler-angler-03.84.img
+  filesize=$(stat --format=%s "$filename")
+  block_count=$(( ($filesize + $block_size - 1) / $block_size ))
+  aligned_size=$(( $block_count * $block_size ))
+  padding_len=$(( $aligned_size - $filesize ))
+  dd if=/dev/zero of="$filename-padding" bs=1 count=$padding_len
+  cat $filename "$filename-padding" > "$filename-padded"
+  rm -v "$filename-padding"
+}
+pad bootloader-angler-angler-03.84.img
+fastboot flash bootloader bootloader-angler-angler-03.84.img-padded
+fastboot reboot-bootloader
+fastboot flash radio radio-angler-angler-03.88.img
+fastboot flash vendor vendor.img
+fastboot reboot-bootloader
+cd /home/darren
+fastboot flash recovery twrp-3.3.1-0-angler.img
+
+adb push lineage-15.1-20191008-nightly-angler-signed.zip Magisk-v19.4.zip FDroid.apk /sdcard
+
+
+# Clear walleye
+# DO NOT ERASE BOOTLOADER
+adb reboot bootloader
+for i in a b; do
+  fastboot erase boot_${i}
+  fastboot erase dtbo_${i}
+  fastboot erase system_${i}
+  fastboot erase vendor_${i}
+  fastboot erase vbmeta_${i}
+done
+fastboot erase userdata
+fastboot set_active a
+fastboot reboot-bootloader
+
+# Flash
+cd walleye-????.??????.???/
+fastboot --slot a flash bootloader bootloader-walleye-??????-???.????.??.img
+fastboot reboot-bootloader
+#
+fastboot --slot a flash radio radio-walleye-?????-?????-??????????.img
+fastboot reboot-bootloader
+#
+fastboot --slot a -w update image-walleye-????.??????.???.zip
+
+# Lock
+fastboot flashing lock_critical
+fastboot flashing lock
+
+# Disable bootloader unlocking in Developer Options
+
+# Check
+fastboot flashing get_unlock_ability
+
+# Magisk
+https://github.com/topjohnwu/Magisk/releases

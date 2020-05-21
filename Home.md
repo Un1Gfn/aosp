@@ -1,3 +1,14 @@
+build AOSP w/ 8GiB RAM
+* http://www.2net.co.uk/blog/jack-server.html
+* https://stackoverflow.com/questions/35579646/android-source-code-compile-error-try-increasing-heap-size-with-java-option
+
+Block-based OTA
+* PixelDust [angler 20200505](https://sourceforge.net/projects/pixeldustproject/files/ota/angler/)
+* PixelExperience [angler 20200101](https://download.pixelexperience.org/angler)
+* https://wiki.lineageos.org/extracting_blobs_from_zips.html
+* https://source.android.com/devices/tech/ota/nonab/block
+* https://solarex.github.io/wiki/Android/android_ota_update.html
+
 [Link to repo](https://github.com/Un1Gfn/lineage)
 
 [Link to CircleCI pipelines](https://app.circleci.com/pipelines/github/Un1Gfn/lineage)

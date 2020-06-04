@@ -1,3 +1,11 @@
+[NDK](https://developer.android.com/ndk)
+* [Wikipedia](https://en.wikipedia.org/wiki/Android_software_development#Android_NDK)
+* [repo](https://android.googlesource.com/platform/ndk.git/)
+* [build](https://android.googlesource.com/platform/ndk/+/master/docs/Building.md)
+* [GitHub](https://github.com/android/ndk)
+* [Bionic x NDK](https://en.wikipedia.org/wiki/Bionic_(software)#Relationship_to_the_NDK)
+* https://stackoverflow.com/questions/23645653/statically-linking-c-file-with-android-bionic-c-library
+
 build AOSP w/ 8GiB RAM
 * http://www.2net.co.uk/blog/jack-server.html
 * https://stackoverflow.com/questions/35579646/android-source-code-compile-error-try-increasing-heap-size-with-java-option

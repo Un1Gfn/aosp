@@ -104,55 +104,6 @@ cp -v my-release-key.jks mobile/build/outputs/apk/release/
 cp -v my-release-key.jks tv/build/outputs/apk/release/
 rm -fv my-release-key.jks
 
-WIFI
-BOOKBAR1
-02031056754
-
-# Unlock
-fastboot flashing get_unlock_ability
-fastboot flashing unlock
-fastboot flashing unlock_critical
-
-# Clear angular
-# DO NOT ERASE BOOTLOADER
-fastboot erase boot
-fastboot erase cache
-fastboot erase data
-fastboot erase dtbo
-fastboot erase radio
-fastboot erase recovery
-fastboot erase system
-fastboot erase vbmeta
-fastboot erase vendor
-
-# Flash base angular
-# boot.img
-# recovery.img
-# system.img
-pad () {
-  # https://bugs.archlinux.org/task/63370
-  block_size=4096
-  filename=bootloader-angler-angler-03.84.img
-  filesize=$(stat --format=%s "$filename")
-  block_count=$(( ($filesize + $block_size - 1) / $block_size ))
-  aligned_size=$(( $block_count * $block_size ))
-  padding_len=$(( $aligned_size - $filesize ))
-  dd if=/dev/zero of="$filename-padding" bs=1 count=$padding_len
-  cat $filename "$filename-padding" > "$filename-padded"
-  rm -v "$filename-padding"
-}
-pad bootloader-angler-angler-03.84.img
-fastboot flash bootloader bootloader-angler-angler-03.84.img-padded
-fastboot reboot-bootloader
-fastboot flash radio radio-angler-angler-03.88.img
-fastboot flash vendor vendor.img
-fastboot reboot-bootloader
-cd /home/darren
-fastboot flash recovery twrp-3.3.1-0-angler.img
-
-adb push lineage-15.1-20191008-nightly-angler-signed.zip Magisk-v19.4.zip FDroid.apk /sdcard
-
-
 # Clear walleye
 # DO NOT ERASE BOOTLOADER
 adb reboot bootloader
@@ -185,6 +136,3 @@ fastboot flashing lock
 
 # Check
 fastboot flashing get_unlock_ability
-
-# Magisk
-https://github.com/topjohnwu/Magisk/releases

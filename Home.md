@@ -1,8 +1,3 @@
-Play Store Download Pending
-* Turn off bluetooth
-* Clear com.android.providers.downloads data
-* Grant com.android.vending location premission manually
-
 [adb](https://developer.android.com/studio/command-line/adb)
 * http://adbcommand.com/
 

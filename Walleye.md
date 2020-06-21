@@ -1,3 +1,16 @@
+## Use
+
+Play Store Download Pending
+* https://support.google.com/googleplay/thread/14845927?hl=en&msgid=14853207
+* https://www.makeuseof.com/tag/4-simple-fixes-google-play-store-problems/
+* https://www.maketecheasier.com/fix-download-pending-error-google-play/
+* Turn off bluetooth
+* Clear com.android.providers.downloads data
+* Grant com.android.vending location premission manually
+
+
+
+
 ## [Full OTA Image](https://developers.google.com/android/ota)
 
 **CANCEL ANY PENDING OTA**
@@ -118,5 +131,12 @@ fastboot --slot a flash boot magisk_patched.img
 
 Boot into system
 
-Sign in to Google
+[Verify A/B and system-as-root](https://topjohnwu.github.io/Magisk/install.html#knowing-your-device)
 
+```bash
+adb devices | grep 'device$' && adb shell
+AB="$(getprop ro.build.ab_update)"
+SAR="$(getprop ro.build.system_root_image)"
+echo "${AB:-FALSE} ${SAR:-FALSE}"
+# true true
+```

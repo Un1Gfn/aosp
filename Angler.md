@@ -184,6 +184,15 @@ fastboot --slot a flash boot magisk_patched.img
 
 Boot into system
 
+[Verify A/B and system-as-root](https://topjohnwu.github.io/Magisk/install.html#knowing-your-device)
+
+```bash
+adb devices | grep 'device$' && adb shell
+AB="$(getprop ro.build.ab_update)"
+SAR="$(getprop ro.build.system_root_image)"
+echo "${AB:-FALSE} ${SAR:-FALSE}"
+# FALSE true
+```
 
 <details><summary>h</summary>
 

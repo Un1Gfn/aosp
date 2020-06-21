@@ -3,3 +3,4 @@
 7098961246c8f143c0fdb1a9ca442c73f326f37d  PixelDust-X-aosp-angler-20200505-0620.zip
 9f1863dde4e369650969ef7bd2ebc6c6dfaea304  PixelDust-X-caf-angler-20200606-0903.zip
 2a9cf2012f28d185dbea54257121c895a88a80fc  PixelExperience_angler-10.0-20200101-0925-OFFICIAL.zip
+025a46b2d2705be00fa122f42c829690a4399b83  walleye-qq3a.200605.001-factory-66e8d94e.zip

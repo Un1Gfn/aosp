@@ -104,30 +104,6 @@ cp -v my-release-key.jks mobile/build/outputs/apk/release/
 cp -v my-release-key.jks tv/build/outputs/apk/release/
 rm -fv my-release-key.jks
 
-# Clear walleye
-# DO NOT ERASE BOOTLOADER
-adb reboot bootloader
-for i in a b; do
-  fastboot erase boot_${i}
-  fastboot erase dtbo_${i}
-  fastboot erase system_${i}
-  fastboot erase vendor_${i}
-  fastboot erase vbmeta_${i}
-done
-fastboot erase userdata
-fastboot set_active a
-fastboot reboot-bootloader
-
-# Flash
-cd walleye-????.??????.???/
-fastboot --slot a flash bootloader bootloader-walleye-??????-???.????.??.img
-fastboot reboot-bootloader
-#
-fastboot --slot a flash radio radio-walleye-?????-?????-??????????.img
-fastboot reboot-bootloader
-#
-fastboot --slot a -w update image-walleye-????.??????.???.zip
-
 # Lock
 fastboot flashing lock_critical
 fastboot flashing lock

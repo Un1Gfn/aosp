@@ -116,7 +116,7 @@ function pad {
   cat $filename "$filename-padding" > "$filename-padded"
   rm -v "$filename-padding"
 }
-pad bootloader-angler-angler-03.84.img
+# pad bootloader-angler-angler-03.84.img
 # fastboot flash bootloader bootloader-angler-angler-03.84.img-padded
 # fastboot reboot-bootloader
 fastboot flash radio radio-angler-angler-03.88.img &&
@@ -125,14 +125,65 @@ fastboot flash vendor vendor.img
 
 Boot into TWRP
 
-Push and install zip
+Push OTA zip
 
 ```bash
 adb devices
 adb push lineage-17.1-20200608-UNOFFICIAL-angler.zip /sdcard/
 ```
 
-Install zip(s) in TWRP manually
+Install OTA zip in TWRP manually
+
+Boot into system
+
+Do nothing and restart system
+
+Enable USB debugging
+
+Push Survival APKs
+* [Magisk Manager](https://github.com/topjohnwu/Magisk/releases)
+* [com.aefyr.sai](https://apk.support/download-app/com.aefyr.sai)
+* [com.smartpack.kernelmanager](https://apk.support/download-app/com.smartpack.kernelmanager) [(source)](https://github.com/SmartPack/SmartPack-Kernel-Manager) [(KernelAdiutor source)](https://github.com/Grarak/KernelAdiutor)
+* [org.mozilla.firefox](https://apk.support/download-app/org.mozilla.firefox)
+
+```bash
+adb devices | grep -Ee 'device$' && \
+adb push \
+  MagiskManager-v7.5.1.apk \
+  com.aefyr.sai.apk \
+  com.smartpack.kernelmanager.zip \
+  org.mozilla.firefox.apk \
+/sdcard/Download
+```
+
+Install the above APKs
+
+Push boot image
+
+```bash
+adb push boot.img /sdcard/Download
+```
+
+Connect to be.mygod.vpnhotspot behind non-DDoS'ed proxy before checking updates in Magisk Manager
+
+Patch boot image w/ Magisk Manager
+
+Pull patched boot image
+
+```bash
+adb pull /sdcard/Download/magisk_patched.img
+```
+
+Reboot into bootloader
+
+Flash patched boot image
+
+```bash
+fastboot --slot a flash boot magisk_patched.img 
+```
+
+Boot into system
+
 
 <details><summary>h</summary>
 

@@ -24,4 +24,11 @@ Unconfirmed ??????.crdownload
 *.apk
 com.smartpack.kernelmanager.zip
 
+# ss-android
+/profiles.json
+
+###
+
 /linux-*
+
+/magisk_patched.img

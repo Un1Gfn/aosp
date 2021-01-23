@@ -1,0 +1,2 @@
+4397c99ed56b8b750bacb9808fd86ddd  lineage-15.1-20201007-UNOFFICIAL-angler.zip
+49d33c6cb0c6a5d672c58346b54afdf4  lineage-17.1-20200819-UNOFFICIAL-angler.zip

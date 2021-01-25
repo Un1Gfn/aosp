@@ -1,6 +1,6 @@
 ```bash
-shellcheck -sbash flash.rc
-source flash.rc
+shellcheck -sbash flash.bashrc
+source flash.bashrc
 walleye_vars
 walleye_unzip_factory
 ```

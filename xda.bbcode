@@ -1,0 +1,180 @@
+[url=https://forum.xda-developers.com/t/4223527/]fastboot cannot flash images to walleye[/url] - [url=https://forum.xda-developers.com/f/7069/post-thread]New post[/url] on [url=https://forum.xda-developers.com/f/7069]Google Pixel 2 Questions & Answers[/url]
+
+Basic GNU/Linux-fu but kinda NOOB to Android :)
+
+Images are extracted from the latest [b]walleye-rp1a.201005.004.a1-factory-0c23f6cf.zip[/b] downloaded from [url=https://developers.google.com/android/images#walleye]Factory Images for Nexus and Pixel Devices[/url]
+
+1. Hold volume down and power button, booting walleye to bootloader
+2. fastboot --slot all flash bootloader walleye-rp1a.201005.004.a1/bootloader-walleye-mw8998-003.0085.00.img
+[quote]Finished. Total time: 0.001s[/quote]
+3. fastboot --slot b flash -w system walleye-rp1a.201005.004.a1/system.img
+[quote]fastboot: error: Device does not support slots[/quote]
+4. fastboot --slot a flash -w system walleye-rp1a.201005.004.a1/system.img
+[quote]
+Warning: system does not support slots, and slot a was requested.
+Sending 'system' (2493052 KB)                      FAILED (remote: 'Uploaded data exceeds max-download-size')
+fastboot: error: Command failed
+[/quote]
+5. fastboot getvar all
+[quote]< waiting for any device >[/quote]
+Walleye screen turns black with tiny little "Press any key to shutdown" on the upper left corner
+6. Turn off walleye with a single click on volume down button, then hold volume down and power button, booting walleye to bootloader again
+8. The following appears after "< waiting for any device >"
+[quote]
+(bootloader) avb_err:0(0)
+(bootloader) is_avb_critical_error:no
+(bootloader) have_oem_lock_id:yes
+(bootloader) avb_stored_rollback_indexes:
+(bootloader) avb_user_settable_key_set:no
+(bootloader) avb_version:1.0.0
+(bootloader) mid:G011A
+(bootloader) version-main:1.02.0.100
+(bootloader) imei:***************
+(bootloader) boot-mode:FASTBOOT
+(bootloader) logical-block-size:0x1000
+(bootloader) erase-block-size:0x1000000
+(bootloader) unlocked:yes
+(bootloader) off-mode-charge:1
+(bootloader) charger-screen-enabled:1
+(bootloader) battery-soc-ok:yes
+(bootloader) battery-voltage:4261
+(bootloader) version-baseband:g8998-00023-2004070200
+(bootloader) version-bootloader:mw8998-002.0083.00
+(bootloader) variant:
+(bootloader) partition-type:userdata:ext4
+(bootloader) partition-size:userdata: 0xD49BFB000
+(bootloader) partition-type:vendor_b:ext4
+(bootloader) partition-size:vendor_b: 0x1F400000
+(bootloader) partition-type:vendor_a:ext4
+(bootloader) partition-size:vendor_a: 0x1F400000
+(bootloader) partition-type:system_b:ext4
+(bootloader) partition-size:system_b: 0xA0000000
+(bootloader) partition-type:system_a:ext4
+(bootloader) partition-size:system_a: 0xA0000000
+(bootloader) partition-type:boot_b:raw
+(bootloader) partition-size:boot_b: 0x2000000
+(bootloader) partition-type:boot_a:raw
+(bootloader) partition-size:boot_a: 0x2000000
+(bootloader) has-slot:radio:yes
+(bootloader) has-slot:bootloader:yes
+(bootloader) has-slot:vendor:yes
+(bootloader) has-slot:modem:yes
+(bootloader) has-slot:system:yes
+(bootloader) has-slot:vbmeta:yes
+(bootloader) has-slot:dtbo:yes
+(bootloader) current-slot:b
+(bootloader) has-slot:boot:yes
+(bootloader) slot-retry-count:b:0
+(bootloader) slot-unbootable:b:no
+(bootloader) slot-successful:b:no
+(bootloader) slot-retry-count:a:3
+(bootloader) slot-unbootable:a:no
+(bootloader) slot-successful:a:no
+(bootloader) slot-count:2
+(bootloader) cid:00000000
+(bootloader) secure:yes
+(bootloader) serialno:FA7********5
+(bootloader) hw-revision:MP1
+(bootloader) product:walleye
+(bootloader) max-download-size:0x20000000
+(bootloader) kernel:uefi
+all:
+Finished. Total time: 0.003s
+[/quote]
+
+More info
+
+[code]
+
+[From computer]
+Linux 820g3 5.10.10-arch1-1 #1 SMP PREEMPT Sat, 23 Jan 2021 23:59:48 +0000 x86_64 GNU/Linux
+00:14.0 USB controller: Intel Corporation Sunrise Point-LP USB 3.0 xHCI Controller (rev 21) (prog-if 30 [XHCI])
+Bus 001 Device 019: ID 18d1:4ee0 Google Inc. Nexus/Pixel Device (fastboot)
+
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x18d1 Google Inc.
+  idProduct          0x4ee0 Nexus/Pixel Device (fastboot)
+  bcdDevice            1.00
+  iManufacturer           1 Google
+  iProduct                2 Android
+  iSerial                 3 FA7********5
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0020
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              160mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     66
+      bInterfaceProtocol      3
+      iInterface              4 fastboot
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               1
+Device Qualifier (for other device speed):
+  bLength                10
+  bDescriptorType         6
+  bcdUSB               2.00
+  bDeviceClass          255 Vendor Specific Class
+  bDeviceSubClass       255 Vendor Specific Subclass
+  bDeviceProtocol       255 Vendor Specific Protocol
+  bMaxPacketSize0        64
+  bNumConfigurations      1
+can't get debug descriptor: Resource temporarily unavailable
+Device Status:     0x0000
+  (Bus Powered)
+
+
+[From walleye bootloader]
+Bootloader: mw8998-002.0083.00
+Baseband: g8998-00023-2004070200
+Product Revision: walleye MP1
+Serial Number: FA7********5
+UFS: 64GB Samsung
+DRAM: 4096MB Micron LPDDR4
+Boot-slot: b
+Console: DISABLED
+Secure Boot: yes (PRODUCTION)
+Device State: unlocked
+
+[From walleye bootloader->Barcodes]
+IMEI/MEID: ***************
+SKU: G011A
+Serial Number: FA7********5
+
+[/code]
